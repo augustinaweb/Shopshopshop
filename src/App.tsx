@@ -7,14 +7,14 @@ import { CartPage } from './CartPage';
 import { 
 	BrowserRouter as Router,
 	Switch,
-	Route,
-	Link
+	Route
 } from 'react-router-dom';
 
 export const App: React.FC = () => {
 	const [products, setProducts] = useState([]);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [error, setError] = useState(null);
+	const [cart, setCart] = useState([{test: 3}]);
 
 	useEffect(() => {
 		fetch('https://fakestoreapi.com/products')
@@ -40,14 +40,14 @@ export const App: React.FC = () => {
 				<div className="app">
 					<Header />
 					<Switch>
-						<Route path="/">
+						<Route exact path="/">
 							<Home products={products} />
 						</Route>
-						<Route path="/product">
-							<ProductPage />
-						</Route>
+						<Route path="/:product" render={({match}) => (
+							<ProductPage product={products.find(p => p.title === match.params.product)}/>
+						)}></Route>
 						<Route path="/cart">
-							<CartPage />
+							<CartPage/>
 						</Route>
 					</Switch>
 				</div>
